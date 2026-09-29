@@ -198,6 +198,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dias", nargs=4, required=True)
     ap.add_argument("--solo", nargs="*", help="limitar a estos device IDs")
+    ap.add_argument("--csv", help="no envía: escribe lo que se enviaría (mismo seed) a este CSV")
     a = ap.parse_args()
     load_dotenv()
     log = setup_logging("backfill")
@@ -210,6 +211,18 @@ def main():
             "dc-rack-a-py": series(days, rack_a), "dc-aisle-cold-pyws": series(days, aisle),
             "dc-pdu-rest": series(days, pdu), "dc-leak-paho": series(days, leak),
             "dc-smoke-replay": series(days, smoke)}
+    if a.csv:
+        import csv as _csv
+        Path(a.csv).parent.mkdir(parents=True, exist_ok=True)
+        keys = sorted({k for rows in plan.values() for _, p in rows for k in p})
+        with open(a.csv, "w", newline="", encoding="utf-8") as f:
+            w = _csv.DictWriter(f, fieldnames=["timestamp", "deviceId"] + keys)
+            w.writeheader()
+            for dev, rows in plan.items():
+                for t, p in rows:
+                    w.writerow({"timestamp": t.isoformat(), "deviceId": dev, **p})
+        log.info("CSV de verificación escrito en %s", a.csv)
+        return
     for dev, rows in plan.items():
         if a.solo and dev not in a.solo:
             continue
