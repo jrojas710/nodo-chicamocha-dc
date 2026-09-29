@@ -1,0 +1,27 @@
+# Regenera (sin enviar) exactamente los datos del replay de 4 días -mismo seed y mismas
+# series de Open-Meteo- y los guarda en datos_4dias/ para calcular la comparativa.
+name: Exportar datos 4 dias
+on:
+  workflow_dispatch:
+    inputs:
+      dias:
+        description: "4 fechas YYYY-MM-DD"
+        default: "2026-09-21 2026-09-23 2026-09-25 2026-09-27"
+permissions:
+  contents: write
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install requests
+      - run: python tools/backfill_historico.py --dias ${{ github.event.inputs.dias }} --csv datos_4dias/replay_4dias.csv
+        env: { IOTC_ID_SCOPE: "x", IOTC_GROUP_KEY: "eA==" }
+      - run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add datos_4dias/replay_4dias.csv
+          git commit -m "Datos de la ventana de 4 días (replay)" || true
+          git push
