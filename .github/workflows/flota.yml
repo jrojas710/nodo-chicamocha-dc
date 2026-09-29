@@ -1,0 +1,59 @@
+# Flota Nodo Chicamocha DC en GitHub Actions (VM Ubuntu de GitHub).
+# Corre los orígenes de segundo plano en bloques de ~5 h 45 min. Cada bloque nuevo
+# arranca por cron; la pausa entre bloques deja un hueco real en IoT Central
+# (evidencia de desconexión/reconexión).
+# DETENER antes de la sustentación: Actions > "Flota IoT" > Cancel run, porque
+# DEV-01 (rack A) se ejecuta en vivo desde el portátil con el mismo Device ID.
+name: Flota IoT
+
+on:
+  workflow_dispatch:
+    inputs:
+      minutos:
+        description: "Duración del bloque (minutos, máx. 345)"
+        default: "345"
+  schedule:
+    - cron: "0 */6 * * *"   # cada 6 h (UTC)
+
+concurrency:
+  group: flota
+  cancel-in-progress: false
+
+jobs:
+  flota:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    env:
+      IOTC_ID_SCOPE: ${{ secrets.IOTC_ID_SCOPE }}
+      IOTC_GROUP_KEY: ${{ secrets.IOTC_GROUP_KEY }}
+      OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+      MIN: ${{ github.event.inputs.minutos || '345' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - name: Dependencias
+        run: |
+          pip install azure-iot-device requests
+          cd devices/dev08_humo_node_amqp_replay && npm install --no-audit --no-fund
+      - name: Ejecutar flota (en paralelo)
+        run: |
+          mkdir -p logs
+          T="${MIN}m"
+          timeout $T python devices/dev01_rack_a_python_mqtt/rack_a.py        > logs/dev01.out 2>&1 &
+          timeout $T python devices/dev04_pasillo_python_mqttws/aisle.py      > logs/dev04.out 2>&1 &
+          timeout $T python devices/dev05_clima_openweather/weather_bridge.py > logs/dev05.out 2>&1 &
+          timeout $T python devices/dev06_aire_openmeteo/airquality_bridge.py > logs/dev06.out 2>&1 &
+          timeout $T python devices/dev09_pdu_http_rest/pdu_rest.py           > logs/dev09.out 2>&1 &
+          (cd devices/dev08_humo_node_amqp_replay && timeout $T node replay.js) > logs/dev08.out 2>&1 &
+          # paho 2.x y azure-iot-device (paho 1.x) no conviven: DEV-07 en un venv propio
+          python -m venv /tmp/v07 && /tmp/v07/bin/pip -q install "paho-mqtt>=2" requests
+          timeout $T /tmp/v07/bin/python devices/dev07_agua_paho_mqtt/leak_paho.py > logs/dev07.out 2>&1 &
+          sleep 90; tail -n 3 logs/*.out
+          wait || true
+      - name: Logs de sesión
+        if: always()
+        uses: actions/upload-artifact@v4
+        with: { name: "logs-${{ github.run_id }}", path: "logs/" }

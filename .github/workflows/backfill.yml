@@ -1,0 +1,24 @@
+# Replay histórico de la ventana de 4 días no continuos (se ejecuta una vez, a mano).
+name: Replay historico 4 dias
+on:
+  workflow_dispatch:
+    inputs:
+      dias:
+        description: "4 fechas YYYY-MM-DD no consecutivas separadas por espacio"
+        default: "2026-09-21 2026-09-23 2026-09-25 2026-09-27"
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      IOTC_ID_SCOPE: ${{ secrets.IOTC_ID_SCOPE }}
+      IOTC_GROUP_KEY: ${{ secrets.IOTC_GROUP_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install azure-iot-device requests
+      - run: python tools/backfill_historico.py --dias ${{ github.event.inputs.dias }}
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with: { name: backfill-logs, path: logs/ }
