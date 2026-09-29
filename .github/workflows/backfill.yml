@@ -6,6 +6,9 @@ on:
       dias:
         description: "4 fechas YYYY-MM-DD no consecutivas separadas por espacio"
         default: "2026-09-21 2026-09-23 2026-09-25 2026-09-27"
+      solo:
+        description: "(opcional) limitar a estos device IDs, separados por espacio"
+        default: ""
 jobs:
   backfill:
     runs-on: ubuntu-latest
@@ -17,8 +20,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
-      - run: pip install azure-iot-device requests
-      - run: python tools/backfill_historico.py --dias ${{ github.event.inputs.dias }}
+      - run: pip install requests
+      - run: python tools/backfill_historico.py --dias ${{ github.event.inputs.dias }} ${{ github.event.inputs.solo && format('--solo {0}', github.event.inputs.solo) || '' }}
       - if: always()
         uses: actions/upload-artifact@v4
         with: { name: backfill-logs, path: logs/ }
