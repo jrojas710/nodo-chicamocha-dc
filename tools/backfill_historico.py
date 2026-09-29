@@ -29,11 +29,11 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import requests
-from azure.iot.device import IoTHubDeviceClient, Message, ProvisioningDeviceClient
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "common"))
-from iotc_common import (clamp, dew_point, get_device_key, load_dotenv,  # noqa: E402
-                         require_env, setup_logging)
+from iotc_common import (HTTP_API, clamp, dew_point, dps_register_rest,  # noqa: E402
+                         generate_sas, get_device_key, load_dotenv, require_env,
+                         setup_logging)
 
 TZ = timezone(timedelta(hours=-5))
 LAT, LON = 7.1193, -73.1227
@@ -154,34 +154,44 @@ def series(days, fn):
     return out
 
 
-def connect(device_id, log):
-    key = get_device_key(device_id)
-    prov = ProvisioningDeviceClient.create_from_symmetric_key(
-        provisioning_host="global.azure-devices-provisioning.net", registration_id=device_id,
-        id_scope=require_env("IOTC_ID_SCOPE"), symmetric_key=key)
-    prov.provisioning_payload = {"modelId": MODELS[device_id]}
-    res = prov.register()
-    c = IoTHubDeviceClient.create_from_symmetric_key(symmetric_key=key,
-                                                     hostname=res.registration_state.assigned_hub,
-                                                     device_id=device_id)
-    c.connect()
-    log.info("%s conectado a %s", device_id, res.registration_state.assigned_hub)
-    return c
-
-
 def send_all(device_id, rows, log):
-    c = connect(device_id, log)
-    for n, (t, payload) in enumerate(rows, 1):
-        payload = dict(payload, replay=True)
-        m = Message(json.dumps(payload))
-        m.content_type, m.content_encoding = "application/json", "utf-8"
-        m.custom_properties["iothub-creation-time-utc"] = t.strftime("%Y-%m-%dT%H:%M:%S.000Z")
-        c.send_message(m)
-        if n % 200 == 0:
-            log.info("%s: %d/%d", device_id, n, len(rows))
-            time.sleep(1)
-    c.shutdown()
-    log.info("%s: %d mensajes históricos enviados", device_id, len(rows))
+    """Envío por HTTPS REST (sin sesión persistente): no desconecta al mismo
+    dispositivo si está transmitiendo en vivo por MQTT/AMQP en paralelo."""
+    from concurrent.futures import ThreadPoolExecutor
+    key = get_device_key(device_id)
+    hub = dps_register_rest(require_env("IOTC_ID_SCOPE"), device_id, key, MODELS[device_id], log)
+    url = f"https://{hub}/devices/{device_id}/messages/events?api-version={HTTP_API}"
+    sess = requests.Session()
+    state = {"tok": None, "exp": 0}
+
+    def token():
+        if time.time() > state["exp"] - 120:
+            state["tok"] = generate_sas(f"{hub}/devices/{device_id}", key, 3600)
+            state["exp"] = time.time() + 3600
+        return state["tok"]
+
+    def post(item):
+        t, payload = item
+        body = json.dumps(dict(payload, replay=True)).encode("utf-8")
+        hdr = {"Authorization": token(), "Content-Type": "application/json",
+               "iothub-contenttype": "application/json", "iothub-contentencoding": "utf-8",
+               "iothub-app-iothub-creation-time-utc": t.strftime("%Y-%m-%dT%H:%M:%S.000Z")}
+        for _ in range(4):
+            r = sess.post(url, data=body, headers=hdr, timeout=30)
+            if r.status_code == 204:
+                return True
+            time.sleep(2)
+        log.error("%s HTTP %s %s", device_id, r.status_code, r.text[:150])
+        return False
+
+    token()
+    ok = 0
+    with ThreadPoolExecutor(max_workers=6) as ex:
+        for n, res in enumerate(ex.map(post, rows), 1):
+            ok += bool(res)
+            if n % 200 == 0:
+                log.info("%s: %d/%d", device_id, n, len(rows))
+    log.info("%s: %d/%d mensajes históricos enviados (HTTPS)", device_id, ok, len(rows))
 
 
 def main():
