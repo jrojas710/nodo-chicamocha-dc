@@ -1,0 +1,7 @@
+.env
+secrets.h
+logs/
+__pycache__/
+node_modules/
+*.pyc
+.nodo_chicamocha/
