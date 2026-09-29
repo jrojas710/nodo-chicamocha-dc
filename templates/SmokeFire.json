@@ -1,0 +1,100 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:chicamochadc:SmokeFire;1",
+  "@type": "Interface",
+  "displayName": {
+    "es": "Detección de humo / incendio"
+  },
+  "description": {
+    "es": "Nodo Chicamocha DC · Parcial 1 IoT Central · UNAB 2026-II"
+  },
+  "contents": [
+    {
+      "name": "smokeObscuration",
+      "displayName": {
+        "es": "Oscurecimiento por humo (%/ft)"
+      },
+      "@type": "Telemetry",
+      "schema": "double"
+    },
+    {
+      "name": "ceilingTemp",
+      "displayName": {
+        "es": "Temperatura de techo"
+      },
+      "@type": [
+        "Telemetry",
+        "Temperature"
+      ],
+      "schema": "double",
+      "unit": "degreeCelsius"
+    },
+    {
+      "name": "smokeAlarm",
+      "displayName": {
+        "es": "Alarma de humo"
+      },
+      "@type": "Telemetry",
+      "schema": "boolean"
+    },
+    {
+      "name": "sirenSilenced",
+      "displayName": {
+        "es": "Sirena silenciada"
+      },
+      "@type": "Telemetry",
+      "schema": "boolean"
+    },
+    {
+      "name": "replayRow",
+      "displayName": {
+        "es": "Fila del CSV reproducida"
+      },
+      "@type": "Telemetry",
+      "schema": "integer"
+    },
+    {
+      "name": "replaySource",
+      "displayName": {
+        "es": "Archivo fuente del replay"
+      },
+      "@type": "Property",
+      "schema": "string",
+      "writable": false
+    },
+    {
+      "name": "silenceAlarm",
+      "displayName": {
+        "es": "Silenciar sirena 300 s"
+      },
+      "@type": "Command"
+    },
+    {
+      "name": "firmwareVersion",
+      "displayName": {
+        "es": "Versión del script / firmware"
+      },
+      "@type": "Property",
+      "schema": "string",
+      "writable": false
+    },
+    {
+      "name": "sourceOrigin",
+      "displayName": {
+        "es": "Origen de envío declarado"
+      },
+      "@type": "Property",
+      "schema": "string",
+      "writable": false
+    },
+    {
+      "name": "lastBoot",
+      "displayName": {
+        "es": "Arranque del proceso"
+      },
+      "@type": "Property",
+      "schema": "dateTime",
+      "writable": false
+    }
+  ]
+}

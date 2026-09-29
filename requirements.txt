@@ -1,0 +1,6 @@
+azure-iot-device>=2.13,<3
+paho-mqtt>=2.0
+requests>=2.31
+pandas>=2.0
+matplotlib>=3.8
+reportlab>=4.0

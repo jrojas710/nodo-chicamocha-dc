@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "author": "Juan Rojas Guerrero",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-esp32-devkit-v1", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-slide-switch", "id": "door_contact", "top": -90, "left": 160, "attrs": {} },
+    { "type": "wokwi-pushbutton", "id": "btn_grant", "top": 60, "left": 200, "attrs": { "color": "green", "label": "RFID OK" } },
+    { "type": "wokwi-pushbutton", "id": "btn_deny", "top": 140, "left": 200, "attrs": { "color": "red", "label": "RFID X" } },
+    { "type": "wokwi-led", "id": "led_lock", "top": 40, "left": -110, "attrs": { "color": "blue", "label": "LOCK" } },
+    { "type": "wokwi-resistor", "id": "r_lock", "top": 110, "left": -120, "rotate": 90, "attrs": { "value": "220" } },
+    { "type": "wokwi-buzzer", "id": "buzzer", "top": -80, "left": -120, "attrs": { "volume": "0.2" } }
+  ],
+  "connections": [
+    [ "esp:TX0", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX0", "$serialMonitor:TX", "", [] ],
+    [ "door_contact:2", "esp:D13", "green", [] ],
+    [ "door_contact:1", "esp:GND.1", "black", [] ],
+    [ "door_contact:3", "esp:3V3", "red", [] ],
+    [ "btn_grant:1.l", "esp:D12", "green", [] ],
+    [ "btn_grant:2.l", "esp:GND.2", "black", [] ],
+    [ "btn_deny:1.l", "esp:D14", "red", [] ],
+    [ "btn_deny:2.l", "esp:GND.2", "black", [] ],
+    [ "led_lock:A", "esp:D25", "blue", [] ],
+    [ "led_lock:C", "r_lock:1", "black", [] ],
+    [ "r_lock:2", "esp:GND.1", "black", [] ],
+    [ "buzzer:1", "esp:GND.1", "black", [] ],
+    [ "buzzer:2", "esp:D33", "orange", [] ]
+  ],
+  "dependencies": {}
+}

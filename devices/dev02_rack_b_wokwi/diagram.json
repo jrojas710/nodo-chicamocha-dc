@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "author": "Juan Rojas Guerrero",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-esp32-devkit-v1", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-dht22", "id": "dht_intake", "top": -120, "left": 170, "attrs": { "temperature": "23.5", "humidity": "45" } },
+    { "type": "board-ds18b20", "id": "ds_exhaust", "top": -110, "left": 290, "attrs": { "temperature": "35" } },
+    { "type": "wokwi-resistor", "id": "r_pullup", "top": -30, "left": 290, "rotate": 90, "attrs": { "value": "4700" } },
+    { "type": "wokwi-relay-module", "id": "relay_fan", "top": 120, "left": 200, "attrs": {} },
+    { "type": "wokwi-led", "id": "led_alarm", "top": 40, "left": -120, "attrs": { "color": "red", "label": "OVERTEMP" } },
+    { "type": "wokwi-resistor", "id": "r_led1", "top": 110, "left": -130, "rotate": 90, "attrs": { "value": "220" } },
+    { "type": "wokwi-led", "id": "led_net", "top": 40, "left": -60, "attrs": { "color": "green", "label": "MQTT" } },
+    { "type": "wokwi-resistor", "id": "r_led2", "top": 110, "left": -70, "rotate": 90, "attrs": { "value": "220" } }
+  ],
+  "connections": [
+    [ "esp:TX0", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX0", "$serialMonitor:TX", "", [] ],
+    [ "dht_intake:VCC", "esp:3V3", "red", [] ],
+    [ "dht_intake:GND", "esp:GND.1", "black", [] ],
+    [ "dht_intake:SDA", "esp:D15", "green", [] ],
+    [ "ds_exhaust:VCC", "esp:3V3", "red", [] ],
+    [ "ds_exhaust:GND", "esp:GND.1", "black", [] ],
+    [ "ds_exhaust:DQ", "esp:D4", "blue", [] ],
+    [ "r_pullup:1", "ds_exhaust:DQ", "blue", [] ],
+    [ "r_pullup:2", "esp:3V3", "red", [] ],
+    [ "relay_fan:VCC", "esp:VIN", "red", [] ],
+    [ "relay_fan:GND", "esp:GND.2", "black", [] ],
+    [ "relay_fan:IN", "esp:D26", "orange", [] ],
+    [ "led_alarm:A", "esp:D2", "red", [] ],
+    [ "led_alarm:C", "r_led1:1", "black", [] ],
+    [ "r_led1:2", "esp:GND.1", "black", [] ],
+    [ "led_net:A", "esp:D27", "green", [] ],
+    [ "led_net:C", "r_led2:1", "black", [] ],
+    [ "r_led2:2", "esp:GND.1", "black", [] ]
+  ],
+  "dependencies": {}
+}

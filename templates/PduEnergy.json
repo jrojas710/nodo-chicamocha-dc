@@ -1,0 +1,124 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:chicamochadc:PduEnergy;1",
+  "@type": "Interface",
+  "displayName": {
+    "es": "PDU / energía de fila"
+  },
+  "description": {
+    "es": "Nodo Chicamocha DC · Parcial 1 IoT Central · UNAB 2026-II"
+  },
+  "contents": [
+    {
+      "name": "activePowerKw",
+      "displayName": {
+        "es": "Potencia activa trifásica"
+      },
+      "@type": [
+        "Telemetry",
+        "Power"
+      ],
+      "schema": "double",
+      "unit": "kilowatt"
+    },
+    {
+      "name": "currentA",
+      "displayName": {
+        "es": "Corriente por fase"
+      },
+      "@type": [
+        "Telemetry",
+        "Current"
+      ],
+      "schema": "double",
+      "unit": "ampere"
+    },
+    {
+      "name": "voltageV",
+      "displayName": {
+        "es": "Tensión fase-neutro"
+      },
+      "@type": [
+        "Telemetry",
+        "Voltage"
+      ],
+      "schema": "double",
+      "unit": "volt"
+    },
+    {
+      "name": "powerFactor",
+      "displayName": {
+        "es": "Factor de potencia"
+      },
+      "@type": "Telemetry",
+      "schema": "double"
+    },
+    {
+      "name": "energyKwh",
+      "displayName": {
+        "es": "Energía del intervalo"
+      },
+      "@type": [
+        "Telemetry",
+        "Energy"
+      ],
+      "schema": "double",
+      "unit": "kilowattHour"
+    },
+    {
+      "name": "energyTotalKwh",
+      "displayName": {
+        "es": "Energía acumulada"
+      },
+      "@type": [
+        "Telemetry",
+        "Energy"
+      ],
+      "schema": "double",
+      "unit": "kilowattHour"
+    },
+    {
+      "name": "loadPercent",
+      "displayName": {
+        "es": "Carga del breaker (%)"
+      },
+      "@type": "Telemetry",
+      "schema": "double"
+    },
+    {
+      "name": "breakerClosed",
+      "displayName": {
+        "es": "Breaker cerrado"
+      },
+      "@type": "Telemetry",
+      "schema": "boolean"
+    },
+    {
+      "name": "firmwareVersion",
+      "displayName": {
+        "es": "Versión del script / firmware"
+      },
+      "@type": "Property",
+      "schema": "string",
+      "writable": false
+    },
+    {
+      "name": "sourceOrigin",
+      "displayName": {
+        "es": "Origen de envío declarado"
+      },
+      "@type": "Property",
+      "schema": "string",
+      "writable": false
+    },
+    {
+      "name": "lastBoot",
+      "displayName": {
+        "es": "Arranque del proceso"
+      },
+      "@type": "Property",
+      "schema": "dateTime",
+      "writable": false
+    }
+  ]
+}

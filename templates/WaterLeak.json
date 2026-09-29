@@ -1,0 +1,90 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:chicamochadc:WaterLeak;1",
+  "@type": "Interface",
+  "displayName": {
+    "es": "Detección de agua bajo piso"
+  },
+  "description": {
+    "es": "Nodo Chicamocha DC · Parcial 1 IoT Central · UNAB 2026-II"
+  },
+  "contents": [
+    {
+      "name": "leakDetected",
+      "displayName": {
+        "es": "Fuga detectada"
+      },
+      "@type": "Telemetry",
+      "schema": "boolean"
+    },
+    {
+      "name": "leakZone",
+      "displayName": {
+        "es": "Zona del cable (0=ninguna,1=A,2=B,3=C/CRAC)"
+      },
+      "@type": "Telemetry",
+      "schema": "integer"
+    },
+    {
+      "name": "floorHumidity",
+      "displayName": {
+        "es": "Humedad bajo piso"
+      },
+      "@type": [
+        "Telemetry",
+        "RelativeHumidity"
+      ],
+      "schema": "double",
+      "unit": "percent"
+    },
+    {
+      "name": "eventReason",
+      "displayName": {
+        "es": "Causa del mensaje (evento/latido)"
+      },
+      "@type": "Telemetry",
+      "schema": "string"
+    },
+    {
+      "name": "resetLeakLatch",
+      "displayName": {
+        "es": "Rearmar enclavamiento de fuga"
+      },
+      "@type": "Command"
+    },
+    {
+      "name": "injectLeakTest",
+      "displayName": {
+        "es": "Prueba funcional de fuga (90 s)"
+      },
+      "@type": "Command"
+    },
+    {
+      "name": "firmwareVersion",
+      "displayName": {
+        "es": "Versión del script / firmware"
+      },
+      "@type": "Property",
+      "schema": "string",
+      "writable": false
+    },
+    {
+      "name": "sourceOrigin",
+      "displayName": {
+        "es": "Origen de envío declarado"
+      },
+      "@type": "Property",
+      "schema": "string",
+      "writable": false
+    },
+    {
+      "name": "lastBoot",
+      "displayName": {
+        "es": "Arranque del proceso"
+      },
+      "@type": "Property",
+      "schema": "dateTime",
+      "writable": false
+    }
+  ]
+}

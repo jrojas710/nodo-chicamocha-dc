@@ -1,0 +1,113 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:chicamochadc:AirIntakeQuality;1",
+  "@type": "Interface",
+  "displayName": {
+    "es": "Calidad de aire de admisión"
+  },
+  "description": {
+    "es": "Nodo Chicamocha DC · Parcial 1 IoT Central · UNAB 2026-II"
+  },
+  "contents": [
+    {
+      "name": "pm25",
+      "displayName": {
+        "es": "PM2.5 (µg/m³)"
+      },
+      "@type": "Telemetry",
+      "schema": "double"
+    },
+    {
+      "name": "pm10",
+      "displayName": {
+        "es": "PM10 (µg/m³)"
+      },
+      "@type": "Telemetry",
+      "schema": "double"
+    },
+    {
+      "name": "aqi",
+      "displayName": {
+        "es": "Índice de calidad de aire (US AQI)"
+      },
+      "@type": "Telemetry",
+      "schema": "double"
+    },
+    {
+      "name": "sourceAgeMin",
+      "displayName": {
+        "es": "Edad del dato de la fuente (min)"
+      },
+      "@type": "Telemetry",
+      "schema": "double"
+    },
+    {
+      "name": "lastSourceTimestamp",
+      "displayName": {
+        "es": "Marca de tiempo de la fuente"
+      },
+      "@type": "Property",
+      "schema": "dateTime",
+      "writable": false
+    },
+    {
+      "name": "provider",
+      "displayName": {
+        "es": "Proveedor de la API"
+      },
+      "@type": "Property",
+      "schema": "string",
+      "writable": false
+    },
+    {
+      "name": "sampleIntervalS",
+      "displayName": {
+        "es": "Intervalo de reenvío (s)"
+      },
+      "@type": "Property",
+      "schema": "integer",
+      "writable": true
+    },
+    {
+      "name": "simulateOutage",
+      "displayName": {
+        "es": "Pausa controlada del puente"
+      },
+      "@type": "Command",
+      "request": {
+        "name": "value",
+        "schema": "integer",
+        "displayName": {
+          "es": "Parámetro"
+        }
+      }
+    },
+    {
+      "name": "firmwareVersion",
+      "displayName": {
+        "es": "Versión del script / firmware"
+      },
+      "@type": "Property",
+      "schema": "string",
+      "writable": false
+    },
+    {
+      "name": "sourceOrigin",
+      "displayName": {
+        "es": "Origen de envío declarado"
+      },
+      "@type": "Property",
+      "schema": "string",
+      "writable": false
+    },
+    {
+      "name": "lastBoot",
+      "displayName": {
+        "es": "Arranque del proceso"
+      },
+      "@type": "Property",
+      "schema": "dateTime",
+      "writable": false
+    }
+  ]
+}

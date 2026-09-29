@@ -1,0 +1,6 @@
+# Librerías Wokwi (pestaña Library Manager)
+PubSubClient
+ArduinoJson
+DHT sensor library for ESPx
+OneWire
+DallasTemperature

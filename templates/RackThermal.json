@@ -1,0 +1,155 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:chicamochadc:RackThermal;1",
+  "@type": "Interface",
+  "displayName": {
+    "es": "Rack térmico (A/B/C)"
+  },
+  "description": {
+    "es": "Nodo Chicamocha DC · Parcial 1 IoT Central · UNAB 2026-II"
+  },
+  "contents": [
+    {
+      "name": "tempIntake",
+      "displayName": {
+        "es": "Temperatura de entrada (frontal)"
+      },
+      "@type": [
+        "Telemetry",
+        "Temperature"
+      ],
+      "schema": "double",
+      "unit": "degreeCelsius"
+    },
+    {
+      "name": "tempExhaust",
+      "displayName": {
+        "es": "Temperatura de salida (posterior)"
+      },
+      "@type": [
+        "Telemetry",
+        "Temperature"
+      ],
+      "schema": "double",
+      "unit": "degreeCelsius"
+    },
+    {
+      "name": "humidity",
+      "displayName": {
+        "es": "Humedad relativa en entrada"
+      },
+      "@type": [
+        "Telemetry",
+        "RelativeHumidity"
+      ],
+      "schema": "double",
+      "unit": "percent"
+    },
+    {
+      "name": "deltaT",
+      "displayName": {
+        "es": "Salto térmico del rack"
+      },
+      "@type": [
+        "Telemetry",
+        "Temperature"
+      ],
+      "schema": "double",
+      "unit": "degreeCelsius"
+    },
+    {
+      "name": "overTemp",
+      "displayName": {
+        "es": "Sobretemperatura local"
+      },
+      "@type": "Telemetry",
+      "schema": "boolean"
+    },
+    {
+      "name": "sampleIntervalS",
+      "displayName": {
+        "es": "Intervalo de muestreo (s)"
+      },
+      "@type": "Property",
+      "schema": "integer",
+      "writable": true
+    },
+    {
+      "name": "intakeAlarmC",
+      "displayName": {
+        "es": "Umbral local de sobretemperatura"
+      },
+      "@type": [
+        "Property",
+        "Temperature"
+      ],
+      "schema": "double",
+      "writable": true,
+      "unit": "degreeCelsius"
+    },
+    {
+      "name": "fanBoostState",
+      "displayName": {
+        "es": "Estado del refuerzo de ventilación"
+      },
+      "@type": "Property",
+      "schema": "boolean",
+      "writable": false
+    },
+    {
+      "name": "setFanBoost",
+      "displayName": {
+        "es": "Activar / desactivar refuerzo de ventilación"
+      },
+      "@type": "Command",
+      "request": {
+        "name": "value",
+        "schema": "boolean",
+        "displayName": {
+          "es": "Parámetro"
+        }
+      }
+    },
+    {
+      "name": "simulateOutage",
+      "displayName": {
+        "es": "Desconexión controlada N segundos"
+      },
+      "@type": "Command",
+      "request": {
+        "name": "value",
+        "schema": "integer",
+        "displayName": {
+          "es": "Parámetro"
+        }
+      }
+    },
+    {
+      "name": "firmwareVersion",
+      "displayName": {
+        "es": "Versión del script / firmware"
+      },
+      "@type": "Property",
+      "schema": "string",
+      "writable": false
+    },
+    {
+      "name": "sourceOrigin",
+      "displayName": {
+        "es": "Origen de envío declarado"
+      },
+      "@type": "Property",
+      "schema": "string",
+      "writable": false
+    },
+    {
+      "name": "lastBoot",
+      "displayName": {
+        "es": "Arranque del proceso"
+      },
+      "@type": "Property",
+      "schema": "dateTime",
+      "writable": false
+    }
+  ]
+}

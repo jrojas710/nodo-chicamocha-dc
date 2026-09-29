@@ -1,0 +1,16 @@
+{
+  "name": "dev08-humo-node-amqp-replay",
+  "version": "1.0.0",
+  "description": "Nodo Chicamocha DC - DEV-08 replay CSV hacia IoT Central por AMQP",
+  "main": "replay.js",
+  "scripts": { "start": "node replay.js" },
+  "license": "MIT",
+  "dependencies": {
+    "azure-iot-device": "^1.18.3",
+    "azure-iot-device-amqp": "^1.14.3",
+    "azure-iot-provisioning-device": "^1.9.1",
+    "azure-iot-provisioning-device-amqp": "^1.9.1",
+    "azure-iot-security-symmetric-key": "^1.8.3",
+    "dotenv": "^16.4.5"
+  }
+}

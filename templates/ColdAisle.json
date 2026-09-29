@@ -1,0 +1,111 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:chicamochadc:ColdAisle;1",
+  "@type": "Interface",
+  "displayName": {
+    "es": "Pasillo frío / contención"
+  },
+  "description": {
+    "es": "Nodo Chicamocha DC · Parcial 1 IoT Central · UNAB 2026-II"
+  },
+  "contents": [
+    {
+      "name": "tempAisle",
+      "displayName": {
+        "es": "Temperatura de pasillo frío"
+      },
+      "@type": [
+        "Telemetry",
+        "Temperature"
+      ],
+      "schema": "double",
+      "unit": "degreeCelsius"
+    },
+    {
+      "name": "humidity",
+      "displayName": {
+        "es": "Humedad relativa"
+      },
+      "@type": [
+        "Telemetry",
+        "RelativeHumidity"
+      ],
+      "schema": "double",
+      "unit": "percent"
+    },
+    {
+      "name": "diffPressure",
+      "displayName": {
+        "es": "Presión diferencial frío-caliente"
+      },
+      "@type": [
+        "Telemetry",
+        "Pressure"
+      ],
+      "schema": "double",
+      "unit": "pascal"
+    },
+    {
+      "name": "dewPoint",
+      "displayName": {
+        "es": "Punto de rocío"
+      },
+      "@type": [
+        "Telemetry",
+        "Temperature"
+      ],
+      "schema": "double",
+      "unit": "degreeCelsius"
+    },
+    {
+      "name": "sampleIntervalS",
+      "displayName": {
+        "es": "Intervalo de muestreo (s)"
+      },
+      "@type": "Property",
+      "schema": "integer",
+      "writable": true
+    },
+    {
+      "name": "simulateOutage",
+      "displayName": {
+        "es": "Desconexión controlada N segundos"
+      },
+      "@type": "Command",
+      "request": {
+        "name": "value",
+        "schema": "integer",
+        "displayName": {
+          "es": "Parámetro"
+        }
+      }
+    },
+    {
+      "name": "firmwareVersion",
+      "displayName": {
+        "es": "Versión del script / firmware"
+      },
+      "@type": "Property",
+      "schema": "string",
+      "writable": false
+    },
+    {
+      "name": "sourceOrigin",
+      "displayName": {
+        "es": "Origen de envío declarado"
+      },
+      "@type": "Property",
+      "schema": "string",
+      "writable": false
+    },
+    {
+      "name": "lastBoot",
+      "displayName": {
+        "es": "Arranque del proceso"
+      },
+      "@type": "Property",
+      "schema": "dateTime",
+      "writable": false
+    }
+  ]
+}

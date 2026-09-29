@@ -1,0 +1,103 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:chicamochadc:AccessDoor;1",
+  "@type": "Interface",
+  "displayName": {
+    "es": "Puerta / control de acceso"
+  },
+  "description": {
+    "es": "Nodo Chicamocha DC · Parcial 1 IoT Central · UNAB 2026-II"
+  },
+  "contents": [
+    {
+      "name": "doorOpen",
+      "displayName": {
+        "es": "Puerta abierta"
+      },
+      "@type": "Telemetry",
+      "schema": "boolean"
+    },
+    {
+      "name": "doorOpenSeconds",
+      "displayName": {
+        "es": "Tiempo abierta (s)"
+      },
+      "@type": "Telemetry",
+      "schema": "integer"
+    },
+    {
+      "name": "accessGranted",
+      "displayName": {
+        "es": "Accesos concedidos en el intervalo"
+      },
+      "@type": "Telemetry",
+      "schema": "integer"
+    },
+    {
+      "name": "accessDenied",
+      "displayName": {
+        "es": "Accesos rechazados en el intervalo"
+      },
+      "@type": "Telemetry",
+      "schema": "integer"
+    },
+    {
+      "name": "eventReason",
+      "displayName": {
+        "es": "Causa del mensaje"
+      },
+      "@type": "Telemetry",
+      "schema": "string"
+    },
+    {
+      "name": "doorHeldAlarmS",
+      "displayName": {
+        "es": "Umbral de puerta retenida (s)"
+      },
+      "@type": "Property",
+      "schema": "integer",
+      "writable": true
+    },
+    {
+      "name": "unlockDoor",
+      "displayName": {
+        "es": "Liberar cerradura N segundos"
+      },
+      "@type": "Command",
+      "request": {
+        "name": "value",
+        "schema": "integer",
+        "displayName": {
+          "es": "Parámetro"
+        }
+      }
+    },
+    {
+      "name": "firmwareVersion",
+      "displayName": {
+        "es": "Versión del script / firmware"
+      },
+      "@type": "Property",
+      "schema": "string",
+      "writable": false
+    },
+    {
+      "name": "sourceOrigin",
+      "displayName": {
+        "es": "Origen de envío declarado"
+      },
+      "@type": "Property",
+      "schema": "string",
+      "writable": false
+    },
+    {
+      "name": "lastBoot",
+      "displayName": {
+        "es": "Arranque del proceso"
+      },
+      "@type": "Property",
+      "schema": "dateTime",
+      "writable": false
+    }
+  ]
+}
